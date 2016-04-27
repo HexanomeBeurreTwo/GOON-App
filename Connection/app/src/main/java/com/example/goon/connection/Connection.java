@@ -149,8 +149,8 @@ public class Connection extends AppCompatActivity {
             StringEntity se = new StringEntity(json);
             httpPost.setEntity(se);
 
-            httpPost.setHeader("GET", "/user/json");
-           // httpPost.setHeader("Content-type", "application/json");
+            //httpPost.setHeader("GET", "/user/json");
+            httpPost.setHeader("Content-type", "application/x-www-from-urlencoded");
 
             HttpResponse httpResponse= httpClient.execute(httpPost);
 
@@ -158,8 +158,9 @@ public class Connection extends AppCompatActivity {
 
             if (inputStream!=null){
                 result=convertInputStreamToString(inputStream);
+
             }else{
-                result="Did not wor!k";
+                result="Muy mal!";
             }
         }catch(Exception e){
 
@@ -205,6 +206,7 @@ public class Connection extends AppCompatActivity {
 
             try {
                 return POST(urls[0],user);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -216,7 +218,12 @@ public class Connection extends AppCompatActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), "Data Sent!", Toast.LENGTH_LONG).show();
+            if (result=="Muy mal!"){
+                Toast.makeText(getBaseContext(), "Data NOT Sent!", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 
