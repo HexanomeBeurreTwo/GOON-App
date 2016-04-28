@@ -1,9 +1,6 @@
 package com.example.goon.connection;
-import android.annotation.SuppressLint;
-import android.media.TimedText;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,15 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -43,10 +35,15 @@ public class Connection extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private EditText email;
+    private EditText age;
     private String usernameS="";
     private String passwordS="";
     private String emailS="";
-
+    private String ageS="";
+    private RadioButton citizenButton;
+    private String citizen="" ;
+    private User user;
+    private Switch aSwitchch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +57,11 @@ public class Connection extends AppCompatActivity {
         username = (EditText) findViewById(R.id.userName);
         password = (EditText) findViewById(R.id.password);
         email = (EditText) findViewById(R.id.email);
-        usernameS=username.getText().toString();
-        passwordS=username.getText().toString();
-        emailS=username.getText().toString();
+        age = (EditText) findViewById(R.id.age);
+        citizenButton = (RadioButton) findViewById(R.id.citizen);
+
+
+
 
         buttonConnection.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +71,13 @@ public class Connection extends AppCompatActivity {
                     // User user = new User(username.toString(), password.toString(), email.toString());
                     // postData("http://goonapp.herokuapp.com/user",  user);
                     if(validate()) {
-                        new HttpAsyncTask().execute("https://goonapp.herokuapp.com/user");
+                        user=new User(((EditText) findViewById(R.id.userName)).getText().toString(),((EditText) findViewById(R.id.email)).getText().toString(),((EditText) findViewById(R.id.password)).getText().toString(),"lyon",((EditText) findViewById(R.id.age)).getText().toString());
+                        new HttpAsyncTask().execute("https://goonapp-dev.herokuapp.com/user?username=" + ((EditText) findViewById(R.id.userName)).getText().toString() +
+                                "&email=" + ((EditText) findViewById(R.id.email)).getText().toString() +
+                                "&password=" + ((EditText) findViewById(R.id.password)).getText().toString()
+                                + "&citizen=" + "lyon" +
+                                "&age=" + ((EditText) findViewById(R.id.age)).getText().toString());
+
                     }else{
 
                         Toast.makeText(getBaseContext(), "Enter some data!", Toast.LENGTH_LONG).show();
@@ -135,12 +140,17 @@ public class Connection extends AppCompatActivity {
         String username=user.getUsername();
         String password = user.getPassword();
         String email = user.getEmail();
+        String citizen=user.getCitizen();
+        String age = user.getAge();
 
         try {
             JSONObject requestObject = new JSONObject();
             requestObject.put("username", username);
             requestObject.put("email", email);
             requestObject.put("password", password);
+            requestObject.put("citizen", password);
+            requestObject.put("age", password);
+
             String json = requestObject.toString();
 
             HttpClient httpClient= new DefaultHttpClient();
@@ -150,7 +160,7 @@ public class Connection extends AppCompatActivity {
             httpPost.setEntity(se);
 
             //httpPost.setHeader("GET", "/user/json");
-            httpPost.setHeader("Content-type", "application/x-www-from-urlencoded");
+            //httpPost.setHeader("Content-type", "application/x-www-from-urlencoded");
 
             HttpResponse httpResponse= httpClient.execute(httpPost);
 
@@ -186,7 +196,7 @@ public class Connection extends AppCompatActivity {
     private boolean validate(){
         if(username.getText().toString().trim().equals(""))
             return false;
-        else if(password.getText().toString().trim().equals(""))
+       else if(password.getText().toString().trim().equals(""))
             return false;
         else if(email.getText().toString().trim().equals(""))
             return false;
@@ -197,12 +207,6 @@ public class Connection extends AppCompatActivity {
     private class HttpAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
-
-            User user = new User();
-            user.setUsername(usernameS);
-            user.setUsername(passwordS);
-            user.setEmail(emailS);
-
 
             try {
                 return POST(urls[0],user);
@@ -218,12 +222,10 @@ public class Connection extends AppCompatActivity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            if (result=="Muy mal!"){
-                Toast.makeText(getBaseContext(), "Data NOT Sent!", Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
-            }
 
+            Toast.makeText(getBaseContext(), "Welcome!", Toast.LENGTH_LONG).show();
+
+            text.setText(result);
         }
     }
 
