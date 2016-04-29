@@ -11,13 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 public class TabFragment extends Fragment {
 
-    boolean isMapOpen = false;
+    protected boolean isMapOpen = false;
 
-    public static TabLayout tabLayout;
-    public static ViewPager viewPager;
-    public static int int_items = 2 ;
+    protected static TabLayout tabLayout;
+    protected static ViewPager viewPager;
+    protected static int int_items = 2 ;
 
     @Nullable
     @Override
@@ -37,10 +39,10 @@ public class TabFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                     if (!isMapOpen) {
-                        ((MainActivity)getActivity()).changeFab(false);
+                        ((MainActivity)getActivity()).switchFragment(false);
                         isMapOpen = true;
                     } else {
-                        ((MainActivity)getActivity()).changeFab(true);
+                        ((MainActivity)getActivity()).switchFragment(true);
                         isMapOpen = false;
                     }
             }

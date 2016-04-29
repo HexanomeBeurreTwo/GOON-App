@@ -11,17 +11,23 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapFragment extends Fragment {
 
-    MapView mMapView;
-    private GoogleMap googleMap;
+    protected MapView mMapView;
+    protected GoogleMap googleMap;
+
+    protected ArrayList<Marker> happeningsMarker;
+    protected ArrayList<MainActivity.Happening> happenings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +46,11 @@ public class MapFragment extends Fragment {
         googleMap = mMapView.getMap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+        happenings = ((MainActivity)getActivity()).getHappeningList();
+        for(MainActivity.Happening hpg : happenings){
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(hpg.getLatitude(), hpg.getLongitude())).draggable(true));
+        }
 
         return v;
     }
@@ -65,7 +76,15 @@ public class MapFragment extends Fragment {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             while (googleMap.getMyLocation() == null) {
             }
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()), 30));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()), 20));
+        }
+    }
+
+    public void refreshingFinished(){
+        googleMap.clear();
+        happenings = ((MainActivity)getActivity()).getHappeningList();
+        for(MainActivity.Happening hpg : happenings){
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(hpg.getLatitude(), hpg.getLongitude())).draggable(true));
         }
     }
 

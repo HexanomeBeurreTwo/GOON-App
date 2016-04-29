@@ -12,28 +12,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/AppTheme">
 
-        <EditText
-            android:id="@+id/search_field"
-            android:selectAllOnFocus="true"
+        <FrameLayout
+            android:layout_gravity="top"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:imeOptions="actionSearch"
-            android:layout_marginLeft="34dp"
-            android:singleLine="true"
-            android:hint="@string/hint"
-            android:cursorVisible="false"
-            android:background="@null"/>
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/date_picker_button"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:background="@drawable/calendar"/>
+            <TextView
+                android:id="@+id/welcoming_text"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textSize="@dimen/title_size"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:text="Activités proposées"
+                android:background="@null"/>
+
+            <EditText
+                android:id="@+id/search_field"
+                android:selectAllOnFocus="true"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|center_horizontal|left"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
+                android:hint="@string/hint"
+                android:background="@null"
+                android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/search_field_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/large_margin"
+                android:background="@drawable/search"/>
+
+            <Button
+                android:id="@+id/date_picker_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:background="@drawable/calendar"/>
+
+        </FrameLayout>
 
     </android.support.v7.widget.Toolbar>
 
@@ -42,8 +67,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:id="@+id/drawerLayout"
-        >
+        android:id="@+id/drawerLayout">
 
         <RelativeLayout
             android:orientation="vertical"
@@ -61,6 +85,40 @@
                 android:layout_marginRight="@dimen/fab_margin"
                 android:layout_marginBottom="@dimen/fab_margin"/>
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/sort_by_distance"
+                android:src="@drawable/locate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:layout_marginBottom="@dimen/second_fab_margin"
+                android:visibility="invisible"/>
+
+            <android.support.design.widget.FloatingActionButton
+            android:id="@+id/sort_by_remaining_time"
+            android:src="@drawable/hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/third_fab_margin"
+            android:visibility="invisible"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/sort_by_alphabetical_order"
+                android:src="@drawable/alphabet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:layout_marginBottom="@dimen/fourth_fab_margin"
+                android:visibility="invisible"/>
+
+
         </RelativeLayout>
 
         <android.support.design.widget.NavigationView
@@ -69,9 +127,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:id="@+id/shitstuff"
-            app:itemTextColor="@color/black"
-            app:menu="@menu/drawermenu"
+            android:id="@+id/navigation_view"
+            app:itemTextColor="@color/Asbestos"
+            app:headerLayout="@layout/drawer_header"
+            app:menu="@menu/drawer_menu"
             android:layout_marginTop="-24dp"
             />
 
