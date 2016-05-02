@@ -6,9 +6,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,12 +17,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class LoginActivity extends AppCompatActivity {
 
     protected TextView sut; //Sign up text
     protected Button cnb; //Connection button
     protected EditText eun; //EditText username
     protected EditText epw; //EditText password
+    final DBHandler dbHandler = new DBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if(enableInternet()) {
-                    new GetUserTask().execute("https://goonapp-dev.herokuapp.com/connection" +
+                    new JSONTask().execute("https://goonapp-dev.herokuapp.com/connection" +
                             "?username=" + eun.getText().toString() +
                             "&password=" + epw.getText().toString());
                 }
@@ -87,5 +99,75 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    private class JSONTask extends AsyncTask<String,String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                String line = "";
+                StringBuffer buffer = new StringBuffer();
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                String data = buffer.toString();
+
+                Boolean resetted =  dbVerification(data);
+                if (resetted== true ) {
+                    data="true";
+                } else {
+                    data = "false";
+                }
+
+                return data;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    private Boolean dbVerification(String data) throws JSONException {
+        Boolean resetted = false;
+        JSONObject jsonObject = new JSONObject(data);
+        Integer id =Integer.parseInt(jsonObject.optString("id").toString());
+        String userName = jsonObject.optString("username");
+        String email = jsonObject.optString("email");
+        String password = jsonObject.optString("password");
+        Integer age = Integer.parseInt((jsonObject.opt("age").toString()));
+        String citizen = jsonObject.optString("citizen");
+        String tags = jsonObject.optString("tags");
+        dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
+        return resetted;
     }
 }
