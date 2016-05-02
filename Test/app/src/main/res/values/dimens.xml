@@ -4,10 +4,12 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
     <dimen name="large_margin">48dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
     <dimen name="second_fab_margin">80dp</dimen>
     <dimen name="third_fab_margin">144dp</dimen>
     <dimen name="fourth_fab_margin">208dp</dimen>
+    <dimen name="fifth_fab_margin">272dp</dimen>
+    <dimen name="sixth_fab_margin">336dp</dimen>
     <dimen name="title_size">20sp</dimen>
 </resources>

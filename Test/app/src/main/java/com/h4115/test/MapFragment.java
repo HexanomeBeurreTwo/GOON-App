@@ -3,6 +3,7 @@ package com.h4115.test;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -11,12 +12,13 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -25,8 +27,7 @@ public class MapFragment extends Fragment {
 
     protected MapView mMapView;
     protected GoogleMap googleMap;
-
-    protected ArrayList<Marker> happeningsMarker;
+    protected Location  lastKnownLocation;
     protected ArrayList<MainActivity.Happening> happenings;
 
     @Override
@@ -46,14 +47,26 @@ public class MapFragment extends Fragment {
         googleMap = mMapView.getMap();
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        googleMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
         happenings = ((MainActivity)getActivity()).getHappeningList();
         for(MainActivity.Happening hpg : happenings){
             googleMap.addMarker(new MarkerOptions().position(new LatLng(hpg.getLatitude(), hpg.getLongitude())).draggable(true));
         }
-
         return v;
     }
+
+    public GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+        @Override
+        public void onMyLocationChange(Location currentLocation) {
+            LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            if(lastKnownLocation == null){}
+            else if (lastKnownLocation.distanceTo(currentLocation) > 30){
+                googleMap.addCircle(new CircleOptions().fillColor(R.color.PomeGranate).center(currentLatLng).radius(40));
+            }
+            lastKnownLocation = currentLocation;
+        }
+    };
 
     public void fabLocate() {
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -76,7 +89,7 @@ public class MapFragment extends Fragment {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             while (googleMap.getMyLocation() == null) {
             }
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()), 20));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()), 12));
         }
     }
 

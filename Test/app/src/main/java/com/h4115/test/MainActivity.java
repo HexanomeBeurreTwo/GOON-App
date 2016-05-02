@@ -23,31 +23,36 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button dpb; //date picker button
-    Button sfb; //search field button
-    FloatingActionButton sal; //sort or locate
-    FloatingActionButton sbr; //sort by remaining time
-    FloatingActionButton sbd; //sort by distance
-    FloatingActionButton sba; //sort by alphabetical order
-    EditText esf; //edit text search field
-    TextView wtv; //welcoming text view
+    protected Button dpb; //date picker button
+    protected Button sfb; //search field button
+    protected FloatingActionButton sal; //sort or locate
+    protected FloatingActionButton sbr; //sort by remaining time
+    protected FloatingActionButton sbd; //sort by distance
+    protected FloatingActionButton sba; //sort by alphabetical order
+    protected EditText esf; //edit text search field
+    protected TextView wtv; //welcoming text view
 
-    Boolean isMapOpen, isSearchFieldVisible, isSortMenuOpen;
-    Animation rotate_forward,rotate_backward;
+    protected Boolean isMapOpen, isSearchFieldVisible, isSortMenuOpen;
+    protected Animation rotate_forward,rotate_backward;
 
-    DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
-    FragmentManager mFragmentManager;
-    FragmentTransaction mFragmentTransaction;
+    protected DrawerLayout mDrawerLayout;
+    protected NavigationView mNavigationView;
+    protected FragmentManager mFragmentManager;
+    protected FragmentTransaction mFragmentTransaction;
 
-    DatePickerDialog datePickerDialog;
+    // List and filtered list of activities
+    protected ArrayList<Happening> happeningList = new ArrayList<>();
+    protected ArrayList<Happening> filteredHappeningList = new ArrayList<>();
 
-    ArrayList<Happening> happeningList = new ArrayList<Happening>();
+    // Calendar for filtering
+    protected DatePickerDialog datePickerDialog;
+    protected Calendar endingDayLimit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +160,7 @@ public class MainActivity extends AppCompatActivity {
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
+                endingDayLimit.set(year, monthOfYear, dayOfMonth);
             }
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
@@ -232,7 +236,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void refreshHappeningList(){
         happeningList.clear();
-        happeningList.add(new Happening(Color.BLACK, "Bonjour", "J'ai refresh !", 45.7, 4.8));
+        ArrayList<String> tags = new ArrayList<>(Arrays.asList("bar", "restaurant"));
+        happeningList.add(new Happening(Color.BLACK, "Ninkasi", "Bar/restaurant", 45.7, 4.8, tags, Calendar.getInstance()));
+    }
+
+    public void filterHappeningList(boolean date, boolean text){
+        ArrayList<Happening> filterByDate = new ArrayList<>();
+        ArrayList<Happening> filterByText = new ArrayList<>();
+
+        if(filteredHappeningList.isEmpty()) {
+            if (date) {
+                for (Happening hpg : happeningList) {
+                    if (hpg.endingDay == null) {
+                        filterByDate.add(hpg);
+                    }
+                    else if (hpg.endingDay.compareTo(Calendar.getInstance()) != -1) {
+                        filterByDate.add(hpg);
+                    }
+                }
+            }
+            if (text) {
+                String search = esf.getText().toString();
+                for (Happening hpg : happeningList){
+                    if(hpg.tags.contains(search) || hpg.name.contains(search) || hpg.location.contains(search)){
+                        filterByDate.add(hpg);
+                    }
+                }
+            }
+            filteredHappeningList.addAll(filterByDate);
+            filteredHappeningList.addAll(filterByText);
+        }
     }
 
     public void refreshingFinishedGeneral(){
@@ -255,16 +288,27 @@ public class MainActivity extends AppCompatActivity {
         protected Double latitude;
         protected Double longitude;
 
-        protected String openingHours;
-        protected Date openingDay;
-        protected int remainingDays;
+        protected ArrayList<String> tags = new ArrayList<>();
+        protected Calendar endingDay;
 
-        public Happening(int imageResource, String name, String location, Double latitude, Double longitude) {
+        public Happening(int imageResource, String name, String location, Double latitude, Double longitude, ArrayList<String> tags) {
             this.latitude = latitude;
             this.longitude = longitude;
             this.imageResource = imageResource;
             this.name = name;
             this.location = location;
+            this.tags = tags;
+            this.endingDay = null;
+        }
+
+        public Happening(int imageResource, String name, String location, Double latitude, Double longitude, ArrayList<String> tags, Calendar endingDay) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.imageResource = imageResource;
+            this.name = name;
+            this.location = location;
+            this.tags = tags;
+            this.endingDay = endingDay;
         }
 
         public int getImageResource(){
@@ -285,6 +329,10 @@ public class MainActivity extends AppCompatActivity {
 
         public Double getLongitude(){
             return this.longitude;
+        }
+
+        public Calendar getEndingDay(){
+            return this.endingDay;
         }
     }
 }

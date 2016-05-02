@@ -3,4 +3,9 @@
     <string name="action_settings">Paramètres</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyA6TPAgxJU0X9JaO6S-09eATv19taJaI-4</string>
     <string name="hint">Rechercher...</string>
+    <string name="title_activity_login"></string>
+    <string name="title_activity_splashscreen"></string>
+    <string name="title_activity_sign_up"></string>
+    <string name="log_in_string">Déjà utilisateur ? <u><font color="#E74C3C">Connectez vous</font></u></string>
+    <string name="sign_up_string">Pas encore utilisateur ? <u><font color="#E74C3C">Créez un compte</font></u></string>
 </resources>
