@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_log_in">LogIn</string>
     <string name="title_activity_sing_up">SingUp</string>
+    <string name="title_activity_subscrfibe_chanels">SubscrfibeChanels</string>
+    <string name="title_activity_subscribe_chanels">SubscribeChanels</string>
 </resources>

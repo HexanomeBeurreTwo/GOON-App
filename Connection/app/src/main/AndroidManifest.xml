@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,6 +24,10 @@
         <activity
             android:name=".SingUp"
             android:label="@string/title_activity_sing_up"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SubscribeChanels"
+            android:label="@string/title_activity_subscribe_chanels"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

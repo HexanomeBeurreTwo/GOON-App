@@ -20,9 +20,9 @@ import java.util.Date;
     private Date date_end;
     private Integer opening_hours;
 
-    private ArrayList<Chanel> chanelArrayList ;
+    private ArrayList<Channel> channelArrayList;
 
-    public Activity(Integer idActivity, String name, String description, String type, ArrayList<String> tags, String address, Double latitude, Double longitude, Boolean temporary, Date date_start, Date date_end, Integer opening_hours, ArrayList<Chanel> chanelArrayList) {
+    public Activity(Integer idActivity, String name, String description, String type, ArrayList<String> tags, String address, Double latitude, Double longitude, Boolean temporary, Date date_start, Date date_end, Integer opening_hours, ArrayList<Channel> channelArrayList) {
         this.idActivity = idActivity;
         this.name = name;
         this.description = description;
@@ -35,7 +35,7 @@ import java.util.Date;
         this.date_start = date_start;
         this.date_end = date_end;
         this.opening_hours = opening_hours;
-        this.chanelArrayList = chanelArrayList;
+        this.channelArrayList = channelArrayList;
     }
 
     public Integer getIdActivity() {
@@ -134,12 +134,12 @@ import java.util.Date;
         this.opening_hours = opening_hours;
     }
 
-    public ArrayList<Chanel> getChanelArrayList() {
-        return chanelArrayList;
+    public ArrayList<Channel> getChannelArrayList() {
+        return channelArrayList;
     }
 
-    public void setChanelArrayList(ArrayList<Chanel> chanelArrayList) {
-        this.chanelArrayList = chanelArrayList;
+    public void setChannelArrayList(ArrayList<Channel> channelArrayList) {
+        this.channelArrayList = channelArrayList;
     }
 
     @Override
@@ -157,7 +157,7 @@ import java.util.Date;
                 ", date_start=" + date_start +
                 ", date_end=" + date_end +
                 ", opening_hours=" + opening_hours +
-                ", chanelArrayList=" + chanelArrayList +
+                ", channelArrayList=" + channelArrayList +
                 '}';
     }
 
@@ -188,7 +188,7 @@ import java.util.Date;
             return false;
         if (opening_hours != null ? !opening_hours.equals(activity.opening_hours) : activity.opening_hours != null)
             return false;
-        return !(chanelArrayList != null ? !chanelArrayList.equals(activity.chanelArrayList) : activity.chanelArrayList != null);
+        return !(channelArrayList != null ? !channelArrayList.equals(activity.channelArrayList) : activity.channelArrayList != null);
 
     }
 

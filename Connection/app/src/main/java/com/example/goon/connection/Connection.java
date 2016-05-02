@@ -131,6 +131,7 @@ public class Connection extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
+
                 }
                 String data = buffer.toString();
 
@@ -187,11 +188,10 @@ public class Connection extends AppCompatActivity {
             dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
             resetted=true;
 
-        } else if(!((dbHandler.getUser(id).getUserId()).equals(id))){
+        } else if(!(((dbHandler.getUser(id).getUserId())).equals(id))){
             dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
             resetted= true;
-        }
-        */
+        }*/
         dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
         return resetted;
     }

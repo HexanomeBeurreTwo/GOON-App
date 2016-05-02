@@ -24,6 +24,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +102,9 @@ public class SingUp extends AppCompatActivity {
 
                     if (validate()) {
                         new HttpAsyncTask().execute("https://goonapp-dev.herokuapp.com/user");
+                        //Intent intent = new Intent(getApplicationContext(), SubscribeChanels.class);
+                       // startActivityForResult(intent, 0);
+                        new  JSONTask().execute("https://goonapp-dev.herokuapp.com/channel");
                     } else {
                         Toast.makeText(getBaseContext(), "Enter some data!", Toast.LENGTH_LONG).show();
                     }
@@ -111,6 +117,7 @@ public class SingUp extends AppCompatActivity {
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
                 finish();
+
             }
         });
     }
@@ -227,6 +234,57 @@ public class SingUp extends AppCompatActivity {
 
         }
 
+    }
+
+
+    public class JSONTask extends AsyncTask<String,String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                String line = "";
+                StringBuffer buffer = new StringBuffer();
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+
+                }
+                String data = buffer.toString();
+                return data;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            //text.setText(result);
+            Intent intent = new Intent(getApplicationContext(), SubscribeChanels.class);
+            intent.putExtra("resultat", result);
+             startActivityForResult(intent, 0);
+        }
     }
 
 }
