@@ -29,6 +29,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    protected User userProfile;
+
     protected Button dpb; //date picker button
     protected Button sfb; //search field button
     protected FloatingActionButton sal; //sort or locate
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     protected FloatingActionButton sba; //sort by alphabetical order
     protected EditText esf; //edit text search field
     protected TextView wtv; //welcoming text view
+
+    protected TextView pnt; //profile name text view
+    protected TextView pet; //profile email text view
 
     protected Boolean isMapOpen, isSearchFieldVisible, isSortMenuOpen;
     protected Animation rotate_forward,rotate_backward;
@@ -54,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
     protected DatePickerDialog datePickerDialog;
     protected Calendar endingDayLimit;
 
+    public void MainActivity(User userProfile){
+        this.userProfile = userProfile;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
         sbd = (FloatingActionButton) findViewById(R.id.sort_by_distance);
         sbr = (FloatingActionButton) findViewById(R.id.sort_by_remaining_time);
         sba = (FloatingActionButton) findViewById(R.id.sort_by_alphabetical_order);
+
+        pet = (TextView) findViewById(R.id.profile_email);
+        pnt = (TextView) findViewById(R.id.profile_name);
+
+        //pet.setText(this.userProfile.getUsername());
+        //pnt.setText(this.userProfile.getEmail());
 
         isMapOpen = false; isSearchFieldVisible = false; isSortMenuOpen = false;
 

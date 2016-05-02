@@ -113,6 +113,18 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
+    public void addUserToDB(String data) throws JSONException {
+        JSONObject jsonObject = new JSONObject(data);
+        Integer id =Integer.parseInt(jsonObject.optString("id").toString());
+        String userName = jsonObject.optString("username");
+        String email = jsonObject.optString("email");
+        String password = jsonObject.optString("password");
+        Integer age = Integer.parseInt((jsonObject.opt("age").toString()));
+        String citizen = jsonObject.optString("citizen");
+        String tags = jsonObject.optString("tags");
+        dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
+    }
+
     private class PostUserTask extends AsyncTask<String, Void, String> {
 
         protected String username;
@@ -185,7 +197,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 inputStream=httpResponse.getEntity().getContent();
 
-                if (inputStream != null) {
+                /*if (inputStream != null) {
 
                     String data = convertInputStreamToString(inputStream);
                     jsonObject = new JSONObject(data);
@@ -202,7 +214,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 }else{
                     result="Muy mal!";
-                }
+                }*/
             }
             catch(Exception e){}
             return result;
