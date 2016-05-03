@@ -60,11 +60,11 @@ public class MapFragment extends Fragment {
         @Override
         public void onMyLocationChange(Location currentLocation) {
             LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-            if(lastKnownLocation == null){}
-            else if (lastKnownLocation.distanceTo(currentLocation) > 30){
-                googleMap.addCircle(new CircleOptions().fillColor(R.color.PomeGranate).center(currentLatLng).radius(40));
+            if(lastKnownLocation == null);
+            else if (lastKnownLocation.distanceTo(currentLocation) > 50){
+                googleMap.addCircle(new CircleOptions().strokeWidth(0).fillColor(R.color.HalfTransparentBlack).center(currentLatLng).radius(40));
+                lastKnownLocation = currentLocation;
             }
-            lastKnownLocation = currentLocation;
         }
     };
 

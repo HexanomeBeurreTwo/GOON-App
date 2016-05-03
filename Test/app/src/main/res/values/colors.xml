@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="White">#FFFF</color>
-    <color name="HalfTransparentBlack">#80000000</color>
+    <color name="HalfTransparentBlack">#F2000000</color>
     <color name="Transparent">#80FFFFFF</color>
     <color name="Asbestos">#7F8C8D</color>
     <color name="PeterRiver">#3498DB</color>

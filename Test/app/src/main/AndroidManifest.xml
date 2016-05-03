@@ -9,7 +9,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/splashscreen"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -17,15 +17,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            
-        </activity>
+            android:windowSoftInputMode="adjustPan" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -37,14 +29,25 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".SplashScreen"
             android:label="@string/title_activity_splashscreen"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
         <activity
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".SubscribeChannels"
+            android:label="@string/title_activity_subscribe_channels"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 public class SplashScreen extends Activity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 1000;
-    private boolean database = false;
+    protected final int SPLASH_DISPLAY_LENGTH = 1500;
+    protected final DBHandler dbHandler = new DBHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,17 +20,17 @@ public class SplashScreen extends Activity {
             @Override
             public void run() {
 
-                if(database){
-                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-                    SplashScreen.this.startActivity(intent);
-                    SplashScreen.this.finish();
-
+                User user = dbHandler.getUser();
+                if(user != null) {
+                    GetUser getUser = new GetUser(getApplicationContext(), dbHandler);
+                    getUser.execute("https://goonapp-dev.herokuapp.com/connection" + "?username=" + user.getUsername() + "&password=" + user.getPassword());
                 }
                 else {
-                    Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     SplashScreen.this.startActivity(intent);
                     SplashScreen.this.finish();
                 }
+
             }
         }, SPLASH_DISPLAY_LENGTH);
     }

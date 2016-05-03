@@ -43,7 +43,6 @@ public class SignUpActivity extends AppCompatActivity {
     protected EditText ema; //EditText mail address
     protected EditText eag; //EditText age
 
-    protected JSONObject jsonObject;
     protected final DBHandler dbHandler = new DBHandler(this);
 
     @Override
@@ -113,16 +112,9 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
-    public void addUserToDB(String data) throws JSONException {
-        JSONObject jsonObject = new JSONObject(data);
-        Integer id =Integer.parseInt(jsonObject.optString("id").toString());
-        String userName = jsonObject.optString("username");
-        String email = jsonObject.optString("email");
-        String password = jsonObject.optString("password");
-        Integer age = Integer.parseInt((jsonObject.opt("age").toString()));
-        String citizen = jsonObject.optString("citizen");
-        String tags = jsonObject.optString("tags");
-        dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
+    public void getUser(String username, String password){
+        GetUser getUserTask = new GetUser(getApplicationContext(), dbHandler);
+        getUserTask.execute("https://goonapp-dev.herokuapp.com/connection" + "?username=" + username + "&password=" + password);
     }
 
     private class PostUserTask extends AsyncTask<String, Void, String> {
@@ -156,25 +148,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Toast.makeText(getBaseContext(), result, Toast.LENGTH_LONG).show();
-        }
-
-        protected String convertInputStreamToString(InputStream inputStream)throws IOException{
-
-            BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
-            String line = "";
-            String result = "";
-            while((line=bufferedReader.readLine())!=null){
-                result+=line;
-            }
-            inputStream.close();
-            return result;
-
+            getUser(this.username, this.password);
         }
 
         private  String POST(final String url) throws JSONException, IOException {
-
-            InputStream inputStream;
             String result = "";
 
 
@@ -192,29 +169,8 @@ public class SignUpActivity extends AppCompatActivity {
                 HttpPost httpPost= new HttpPost(url);
 
                 httpPost.setEntity(new UrlEncodedFormEntity(pairs));
+                httpClient.execute(httpPost);
 
-                HttpResponse httpResponse= httpClient.execute(httpPost);
-
-                inputStream=httpResponse.getEntity().getContent();
-
-                /*if (inputStream != null) {
-
-                    String data = convertInputStreamToString(inputStream);
-                    jsonObject = new JSONObject(data);
-                    Integer id =Integer.parseInt(jsonObject.optString("id").toString());
-                    String userName = jsonObject.optString("username");
-                    String email = jsonObject.optString("email");
-                    String password = jsonObject.optString("password");
-                    Integer age = Integer.parseInt((jsonObject.opt("age").toString()));
-                    String citizen = jsonObject.optString("citizen");
-                    String tags = jsonObject.optString("tags");
-                    dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
-
-                    result ="Welcome "+ dbHandler.getUser(id).getUsername().toString()+"!";
-
-                }else{
-                    result="Muy mal!";
-                }*/
             }
             catch(Exception e){}
             return result;

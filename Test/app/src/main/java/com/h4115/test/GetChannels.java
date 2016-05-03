@@ -1,10 +1,7 @@
 package com.h4115.test;
+
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,16 +11,16 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class GetUser extends AsyncTask<String,String, String> {
+public class GetChannels extends AsyncTask<String,String, String> {
 
     protected Context context;
     protected DBHandler dbHandler;
-    protected User connectedUser;
-    protected boolean success = false;
+    protected User user;
 
-    public GetUser(Context context, DBHandler dbHandler){
+    public GetChannels(Context context, DBHandler dbHandler, User user){
         this.context = context;
         this.dbHandler = dbHandler;
+        this.user = user;
     }
 
     @Override
@@ -37,31 +34,17 @@ public class GetUser extends AsyncTask<String,String, String> {
             InputStream stream = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(stream));
 
-            String line;
+            String line = "";
             StringBuffer buffer = new StringBuffer();
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
+
             }
             String data = buffer.toString();
-
-            JSONObject jsonObject = new JSONObject(data);
-            Integer id = Integer.parseInt(jsonObject.optString("id").toString());
-            String userName = jsonObject.optString("username");
-            String email = jsonObject.optString("email");
-            String password = jsonObject.optString("password");
-            Integer age = Integer.parseInt((jsonObject.opt("age").toString()));
-            String citizen = jsonObject.optString("citizen");
-            String tags = jsonObject.optString("tags");
-            connectedUser = new User(id, userName, password, email, age, citizen, tags);
-            dbHandler.addUser(connectedUser);
-            this.success = true;
-
+            return data;
         } catch (MalformedURLException e) {
-            this.success = false;
+            e.printStackTrace();
         } catch (IOException e) {
-            this.success = false;
-
-        } catch (JSONException e) {
             e.printStackTrace();
         } finally {
             if (connection != null) {
@@ -72,7 +55,7 @@ public class GetUser extends AsyncTask<String,String, String> {
                     reader.close();
                 }
             } catch (IOException e) {
-                this.success = false;
+                e.printStackTrace();
             }
         }
         return null;
@@ -80,11 +63,6 @@ public class GetUser extends AsyncTask<String,String, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        if(!success){
-            DasAbsichtGeschaftsfuhrer.LaunchLogin(context);
-        }
-        else {
-            DasAbsichtGeschaftsfuhrer.LaunchMain(context, connectedUser);
-        }
+        DasAbsichtGeschaftsfuhrer.LaunchSubscribeChannels(context, result, user);
     }
 }

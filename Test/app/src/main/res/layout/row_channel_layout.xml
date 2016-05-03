@@ -3,27 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/happening_image"
-        android:layout_width="50dp"
-        android:layout_height="50dp"/>
-
     <TextView
-        android:id="@+id/happening_name"
+        android:id="@+id/channel_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/Asbestos"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/happening_image"
-        android:layout_alignTop="@+id/happening_image"
+        android:textColor="@color/Asbestos"
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/happening_location"
+        android:id="@+id/channel_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:textColor="@color/Asbestos"
-        android:layout_alignLeft="@+id/happening_name"
-        android:layout_below="@+id/happening_name"/>
+        android:layout_below="@+id/channel_name"/>
+
+    <Switch
+        android:id="@+id/channel_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"/>
 
 </RelativeLayout>

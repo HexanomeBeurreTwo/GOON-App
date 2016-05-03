@@ -24,6 +24,19 @@ public class User {
 
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", citizen='" + citizen + '\'' +
+                ", userId=" + userId +
+                ", tags=" + tags +
+                '}';
+    }
+
     public User(Integer userId, String username, String password, String email, Integer age, String citizen) {
         this.username = username;
         this.password = password;
@@ -63,19 +76,6 @@ public class User {
 
         return !(tags != null ? !tags.equals(user.tags) : user.tags != null);
 
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", age=" + age +
-                ", citizen='" + citizen + '\'' +
-                ", userId=" + userId +
-                ", tags=" + tags +
-                '}';
     }
 
     public String getUsername() {

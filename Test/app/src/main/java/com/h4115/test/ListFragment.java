@@ -24,7 +24,7 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list,null);
 
-        lsv = (ListView) v.findViewById(R.id.listView);
+        lsv = (ListView) v.findViewById(R.id.list_view);
 
         happenings = ((MainActivity)getActivity()).getHappeningList();
         HappeningAdapter hpa = new HappeningAdapter(getContext(), happenings);

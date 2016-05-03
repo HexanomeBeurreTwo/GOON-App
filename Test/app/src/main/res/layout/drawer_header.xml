@@ -17,19 +17,17 @@
         android:layout_height="wrap_content"
         android:src="@drawable/profil" />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/title_size"
-        android:text="Profil Goon"
         android:textColor="@color/Asbestos"/>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/profile_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="goonapp-dev.herokuapp.com"
         android:textColor="@color/Asbestos"/>
 
 </LinearLayout>

@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if(enableInternet()) {
-                    GetUser getUserTask = new GetUser(LoginActivity.this, null, null);
+                    GetUser getUserTask = new GetUser(getApplicationContext(), dbHandler);
                     getUserTask.execute("https://goonapp-dev.herokuapp.com/connection" + "?username=" + eun.getText().toString() + "&password=" + epw.getText().toString());
                 }
             }
@@ -89,17 +89,5 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    public void addUserToDB(String data) throws JSONException {
-        JSONObject jsonObject = new JSONObject(data);
-        Integer id =Integer.parseInt(jsonObject.optString("id").toString());
-        String userName = jsonObject.optString("username");
-        String email = jsonObject.optString("email");
-        String password = jsonObject.optString("password");
-        Integer age = Integer.parseInt((jsonObject.opt("age").toString()));
-        String citizen = jsonObject.optString("citizen");
-        String tags = jsonObject.optString("tags");
-        dbHandler.addUser(new User(id, userName, password, email, age, citizen, tags));
     }
 }
