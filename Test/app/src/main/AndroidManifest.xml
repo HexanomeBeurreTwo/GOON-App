@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -29,26 +30,32 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".SplashScreen"
             android:label="@string/title_activity_splashscreen"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
+        </activity>
         <activity
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ChannelActivity"
+            android:label="@string/title_activity_channels"
+            android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name=".SubscribeChannels"
-            android:label="@string/title_activity_subscribe_channels"
-            android:theme="@style/AppTheme.NoActionBar" />
+        </activity>
+        <activity android:name=".HappeningActivity"
+            android:label="@string/title_activity_happening"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

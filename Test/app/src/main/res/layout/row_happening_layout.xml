@@ -13,13 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/Asbestos"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="@dimen/short_margin"
         android:layout_toRightOf="@+id/happening_image"
         android:layout_alignTop="@+id/happening_image"
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/happening_location"
+        android:id="@+id/happening_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/Asbestos"

@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.List;
 
-public class HappeningAdapter extends ArrayAdapter<MainActivity.Happening> {
+public class HappeningAdapter extends ArrayAdapter<Happening> {
 
-    public HappeningAdapter(Context context, List<MainActivity.Happening> happenings) {
+    public HappeningAdapter(Context context, List<Happening> happenings) {
         super(context, 0, happenings);
     }
 
@@ -27,23 +28,30 @@ public class HappeningAdapter extends ArrayAdapter<MainActivity.Happening> {
         if(hvh == null){
             hvh = new HappeningViewHolder();
             hvh.happeningName = (TextView) convertView.findViewById(R.id.happening_name);
-            hvh.happeningLocation = (TextView) convertView.findViewById(R.id.happening_location);
+            hvh.happeningTags = (TextView) convertView.findViewById(R.id.happening_tags);
             hvh.happeningImage = (ImageView) convertView.findViewById(R.id.happening_image);
             convertView.setTag(hvh);
         }
 
-        MainActivity.Happening happening = getItem(position);
+        Happening happening = getItem(position);
+
+        String tags = happening.getTags();
+        tags = tags.replace("[", "");
+        tags = tags.replace("]", "");
+        tags = tags.replace("\"", "");
+        tags = tags.replace(",", " ");
+        tags = tags.replace(";", " ");
 
         hvh.happeningName.setText(happening.getName());
-        hvh.happeningLocation.setText(happening.getLocation());
-        hvh.happeningImage.setImageDrawable(new ColorDrawable(happening.getImageResource()));
+        hvh.happeningTags.setText(tags);
+        hvh.happeningImage.setImageDrawable(new ColorDrawable(happening.getId()));
 
         return convertView;
     }
 
     private class HappeningViewHolder{
         public TextView happeningName;
-        public TextView happeningLocation;
+        public TextView happeningTags;
         public ImageView happeningImage;
     }
 }

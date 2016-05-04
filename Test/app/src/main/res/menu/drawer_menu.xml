@@ -14,4 +14,57 @@
             android:icon="@drawable/disconnect"
             android:title="Déconnexion" />
     </group>
+
+    <group android:checkableBehavior="single">
+        <item android:title="Souscriptions">
+            <menu>
+                <item
+                    android:id="@+id/channel_culture"
+                    android:icon="@drawable/culture"
+                    android:title="Culture"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_sport"
+                    android:icon="@drawable/sport"
+                    android:title="Sport"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_family"
+                    android:icon="@drawable/family"
+                    android:title="Famille"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_must_see"
+                    android:icon="@drawable/must_see"
+                    android:title="A voir"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_evening"
+                    android:icon="@drawable/evening"
+                    android:title="Soirée"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_romantism"
+                    android:icon="@drawable/romantism"
+                    android:title="Romantisme"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_restaurant"
+                    android:icon="@drawable/restaurant"
+                    android:title="Restaurant"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_trending"
+                    android:icon="@drawable/trending"
+                    android:title="Tendance"
+                    android:visibility="invisible"/>
+                <item
+                    android:id="@+id/channel_music"
+                    android:icon="@drawable/music"
+                    android:title="Musique"
+                    android:visibility="invisible"/>
+            </menu>
+        </item>
+    </group>
+
 </menu>

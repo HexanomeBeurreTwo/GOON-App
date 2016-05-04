@@ -7,21 +7,19 @@ public class Channel {
     private String name;
     private String description;
     private String tags;
-    private ArrayList<MainActivity.Happening> happeningArrayList;
 
-    public Channel(Integer idChanel, String name, String description, String tags, ArrayList<MainActivity.Happening> happeningArrayList) {
+    public Channel(Integer idChanel, String name, String description, String tags) {
         this.idChannel = idChanel;
-
         this.name = name;
         this.description = description;
         this.tags = tags;
-        this.happeningArrayList = happeningArrayList;
     }
 
     public Channel(Integer idChannel, String name, String description) {
         this.idChannel = idChannel;
         this.name = name;
         this.description = description;
+        this.tags = "";
 
     }
 
@@ -58,14 +56,6 @@ public class Channel {
         this.tags = tags;
     }
 
-    public ArrayList<MainActivity.Happening> getHappeningArrayList() {
-        return happeningArrayList;
-    }
-
-    public void setHappeningArrayList(ArrayList<MainActivity.Happening> happeningArrayList) {
-        this.happeningArrayList = happeningArrayList;
-    }
-
     @Override
     public String toString() {
         return "Channel{" +
@@ -73,7 +63,6 @@ public class Channel {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", tags='" + tags + '\'' +
-                ", activityArrayList=" + happeningArrayList +
                 '}';
     }
 
@@ -92,8 +81,7 @@ public class Channel {
         if (getTags() != null ? !getTags().equals(channel.getTags()) : channel.getTags() != null)
             return false;
 
-        return getHappeningArrayList().equals(channel.getHappeningArrayList());
-
+        return true;
     }
 
 }

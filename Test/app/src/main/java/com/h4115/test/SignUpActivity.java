@@ -24,6 +24,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.HttpResponse;
@@ -51,6 +54,7 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().hide();
 
         eun = (EditText) findViewById(R.id.username);
         epw = (EditText) findViewById(R.id.password);
@@ -113,8 +117,28 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void getUser(String username, String password){
-        GetUser getUserTask = new GetUser(getApplicationContext(), dbHandler);
+        GetUser getUserTask = new GetUser();
         getUserTask.execute("https://goonapp-dev.herokuapp.com/connection" + "?username=" + username + "&password=" + password);
+    }
+
+    public void EndOfTask(boolean success, User user){
+        if(!success){
+            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+            SignUpActivity.this.startActivity(intent);
+            SignUpActivity.this.finish();
+        }
+        else {
+            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+            intent.putExtra("id", user.getUserId());
+            intent.putExtra("username",user.getUsername());
+            intent.putExtra("password", user.getPassword());
+            intent.putExtra("email", user.getEmail());
+            intent.putExtra("age", user.getAge());
+            intent.putExtra("citizen", user.getCitizen());
+            intent.putExtra("tags", user.getTags());
+            SignUpActivity.this.startActivity(intent);
+            SignUpActivity.this.finish();
+        }
     }
 
     private class PostUserTask extends AsyncTask<String, Void, String> {
@@ -174,6 +198,69 @@ public class SignUpActivity extends AppCompatActivity {
             }
             catch(Exception e){}
             return result;
+        }
+    }
+
+    private class GetUser extends AsyncTask<String,String, String> {
+
+        protected User connectedUser;
+        protected boolean success = false;
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                String line;
+                StringBuffer buffer = new StringBuffer();
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                String data = buffer.toString();
+
+                JSONObject jsonObject = new JSONObject(data);
+                Integer id = Integer.parseInt(jsonObject.optString("id").toString());
+                String userName = jsonObject.optString("username");
+                String email = jsonObject.optString("email");
+                String password = jsonObject.optString("password");
+                Integer age = Integer.parseInt((jsonObject.opt("age").toString()));
+                String citizen = jsonObject.optString("citizen");
+                String tags = jsonObject.optString("tags");
+                connectedUser = new User(id, userName, password, email, age, citizen, tags);
+                dbHandler.addUser(connectedUser);
+                this.success = true;
+
+            } catch (MalformedURLException e) {
+                this.success = false;
+            } catch (IOException e) {
+                this.success = false;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    this.success = false;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            EndOfTask(success, connectedUser);
         }
     }
 }

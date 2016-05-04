@@ -3,10 +3,14 @@
     <string name="action_settings">Paramètres</string>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyA6TPAgxJU0X9JaO6S-09eATv19taJaI-4</string>
     <string name="hint">Rechercher...</string>
-    <string name="title_activity_login"></string>
-    <string name="title_activity_splashscreen">Goon</string>
-    <string name="title_activity_sign_up"></string>
-    <string name="title_activity_subscribe_channels"></string>
+
+    <string name="title_activity_login">Se connecter</string>
+    <string name="title_activity_splashscreen">GO ON</string>
+    <string name="title_activity_sign_up">Créer un compte</string>
+    <string name="title_activity_channels">Choix des souscriptions</string>
+    <string name="title_activity_subscribe_channels">Choix des souscriptions</string>
+    <string name="title_activity_happening">Détails de l\'activité</string>
+
     <string name="log_in_string">Déjà utilisateur ? <u><font color="#E74C3C">Connectez vous</font></u></string>
     <string name="sign_up_string">Pas encore utilisateur ? <u><font color="#E74C3C">Créez un compte</font></u></string>
 </resources>

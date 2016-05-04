@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.gms.maps.MapView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mapView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-</com.google.android.gms.maps.MapView>
+    <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    </com.google.android.gms.maps.MapView>
+
+
+    <Button
+        android:id="@+id/marker_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:layout_alignParentBottom="true"
+        android:textSize="@dimen/button_size"
+        android:layout_marginLeft="@dimen/short_margin"
+        android:layout_marginRight="@dimen/short_margin"
+        android:layout_marginBottom="@dimen/short_margin"
+        android:textColor="@color/Asbestos"
+        android:visibility="invisible"/>
+
+
+</RelativeLayout>

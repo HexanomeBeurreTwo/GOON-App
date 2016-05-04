@@ -6,28 +6,46 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "DBHandler";
 
-    private static final String TABLE_CHANEL = "chanelTable";
-    private static final String TABLE_ACTIVITY = "activityTable";
+    private static final String TABLE_CHANNEL = "channelTable";
+    private static final String TABLE_HAPPENING = "happeningTable";
     private static final String TABLE_USER = "userTable";
+    private static final String TABLE_CIRCLE = "circleTable";
 
-    private static final String CHANEL_ID = "userID";
-    private static final String CHANEL_NAME = "chanelName";
-    private static final String CHANEL_DESCRIPTION = "chanelDescription";
-    private static final String CHANEL_TAGS = "chanelTags";
+    private static final String CHANNEL_ID = "channelId";
+    private static final String CHANNEL_NAME = "channelName";
+    private static final String CHANNEL_DESCRIPTION = "channelDescription";
+    private static final String CHANNEL_TAGS = "channelTags";
 
-    public static final String USER_ID = "userID";
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String USER_EMAIL = "userEmail";
-    public static final String AGE = "age";
-    public static final String CITIZEN = "citizen";
-    public static final String TAGS = "tags";
+    private static final String HAPPENING_ID = "happeningId";
+    private static final String HAPPENING_NAME = "happeningName";
+    private static final String HAPPENING_DESCRIPTION = "happeningDescription";
+    private static final String HAPPENING_LATITUDE = "happeningLatitude";
+    private static final String HAPPENING_LONGITUDE = "happeningLongitude";
+    private static final String HAPPENING_TEMPORARY = "happeningTemporary";
+    private static final String HAPPENING_TAGS = "happeningTags";
 
+    private static final String USER_ID = "userID";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String USER_EMAIL = "userEmail";
+    private static final String AGE = "age";
+    private static final String CITIZEN = "citizen";
+    private static final String TAGS = "tags";
+
+    private static final String CIRCLE_ID = "circleId";
+    private static final String CIRCLE_LATITUDE = "circleLatitude";
+    private static final String CIRCLE_LONGITUDE = "circleLongitude";
+
+    private static int nbCircles = 0;
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,25 +63,48 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private void createTables(SQLiteDatabase db){
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                +USER_ID + " INTEGER PRIMARY KEY, "
-                +USERNAME + " TEXT NOT NULL, "
-                +PASSWORD + " TEXT NOT NULL, "
+                + USER_ID + " INTEGER PRIMARY KEY, "
+                + USERNAME + " TEXT NOT NULL, "
+                + PASSWORD + " TEXT NOT NULL, "
                 + USER_EMAIL + " TEXT NOT NULL, "
                 + AGE + " INTEGER, "
                 + CITIZEN + " TEXT NOT NULL, "
-                + TAGS + " TEXT" + ");";
+                + TAGS + " TEXT);";
+
+        String CREATE_CHANNEL_TABLE = "CREATE TABLE " + TABLE_CHANNEL + "("
+                + CHANNEL_ID + " INTEGER PRIMARY KEY, "
+                + CHANNEL_NAME + " TEXT NOT NULL, "
+                + CHANNEL_DESCRIPTION + " TEXT NOT NULL, "
+                + CHANNEL_TAGS + " TEXT);";
+
+        String CREATE_HAPPENING_TABLE = "CREATE TABLE " + TABLE_HAPPENING + "("
+                + HAPPENING_ID + " INTEGER PRIMARY KEY, "
+                + HAPPENING_NAME + " TEXT NOT NULL, "
+                + HAPPENING_DESCRIPTION + " TEXT NOT NULL, "
+                + HAPPENING_LATITUDE + " DOUBLE NOT NULL, "
+                + HAPPENING_LONGITUDE + " DOUBLE NOT NULL, "
+                + HAPPENING_TEMPORARY + " BOOLEAN NOT NULL, "
+                + HAPPENING_TAGS + " TEXT);";
+
+        String CREATE_CIRCLE_TABLE = "CREATE TABLE " + TABLE_CIRCLE + "("
+                + CIRCLE_ID + " INTEGER PRIMARY KEY, "
+                + CIRCLE_LATITUDE + " DOUBLE NOT NULL, "
+                + CIRCLE_LONGITUDE + " DOUBLE NOT NULL);";
 
         db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_CHANNEL_TABLE);
+        db.execSQL(CREATE_HAPPENING_TABLE);
+        db.execSQL(CREATE_CIRCLE_TABLE);
     }
 
     private void deleteTables(SQLiteDatabase db){
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHANNEL);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HAPPENING);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CIRCLE);
     }
 
     public void addUser(User user) {
-
-        System.out.println(user.getTags());
-
         if(user == null){
             SQLiteDatabase mdb = this.getWritableDatabase();
             mdb.execSQL("DELETE FROM " + TABLE_USER);
@@ -109,11 +150,113 @@ public class DBHandler extends SQLiteOpenHelper {
         return null;
     }
 
-    public int userSubscriptions(String tags) {
+    public void addChannels(ArrayList<Channel> channels) {
+
+        SQLiteDatabase mdb = this.getWritableDatabase();
+        mdb.execSQL("DELETE FROM " + TABLE_CHANNEL);
+
+        if(channels == null) return;
+
+        for(Channel channel : channels) {
+            ContentValues values = new ContentValues();
+            values.put(DBHandler.CHANNEL_ID, channel.getIdChannel());
+            values.put(DBHandler.CHANNEL_NAME, channel.getName());
+            values.put(DBHandler.CHANNEL_DESCRIPTION, channel.getDescription());
+            values.put(DBHandler.CHANNEL_TAGS, channel.getTags());
+            mdb.insert(DBHandler.TABLE_CHANNEL, null, values);
+        }
+
+        mdb.close();
+    }
+
+    public ArrayList<Channel> getChannels(){
+
+        SQLiteDatabase mdb = this.getReadableDatabase();
+        ArrayList<Channel> channelsToReturn = new ArrayList<>();
+
+        Cursor cursor = mdb.query(TABLE_CHANNEL, new String[]{"*"}, null, null, null, null, null, null);
+
+        if(cursor != null) {
+            while(cursor.moveToNext()) {
+                Channel channel = new Channel(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3));
+                channelsToReturn.add(channel);
+            }
+            mdb.close();
+            return channelsToReturn;
+        }
+        return null;
+    }
+
+    public void addHappenings(ArrayList<Happening> happenings) {
+
+        SQLiteDatabase mdb = this.getWritableDatabase();
+        mdb.execSQL("DELETE FROM " + TABLE_HAPPENING);
+
+        if(happenings == null) return;
+
+        for(Happening happening : happenings) {
+
+            ContentValues values = new ContentValues();
+            values.put(DBHandler.HAPPENING_ID, happening.getId());
+            values.put(DBHandler.HAPPENING_NAME, happening.getName());
+            values.put(DBHandler.HAPPENING_DESCRIPTION, happening.getDescription());
+            values.put(DBHandler.HAPPENING_LATITUDE, happening.getLatitude());
+            values.put(DBHandler.HAPPENING_LONGITUDE, happening.getLongitude());
+            values.put(DBHandler.HAPPENING_TEMPORARY, happening.getTemporary());
+            values.put(DBHandler.HAPPENING_TAGS, happening.getTags());
+            mdb.insert(DBHandler.TABLE_HAPPENING, null, values);
+        }
+
+        mdb.close();
+    }
+
+    public ArrayList<Happening> getHappenings(){
+
+        SQLiteDatabase mdb = this.getReadableDatabase();
+        ArrayList<Happening> happeningsToReturn = new ArrayList<>();
+
+        Cursor cursor = mdb.query(TABLE_HAPPENING, new String[]{"*"}, null, null, null, null, null, null);
+
+        if(cursor != null) {
+            while(cursor.moveToNext()) {
+                Happening happening = new Happening(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), Double.parseDouble(cursor.getString(3)), Double.parseDouble(cursor.getString(4)), Boolean.parseBoolean(cursor.getString(5)), cursor.getString(6));
+                happeningsToReturn.add(happening);
+            }
+            mdb.close();
+            return happeningsToReturn;
+        }
+        return null;
+    }
+
+    public void addCircle(LatLng center){
         SQLiteDatabase mdb = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        User user = getUser();
-        values.put(TAGS, tags);
-        return mdb.update(TABLE_USER, values, USER_ID + " = ?", new String[]{String.valueOf(user.getUserId())});
+        values.put(DBHandler.CIRCLE_ID, nbCircles);
+        values.put(DBHandler.CIRCLE_LATITUDE, center.latitude);
+        values.put(DBHandler.CIRCLE_LONGITUDE, center.longitude);
+        mdb.insert(DBHandler.TABLE_CIRCLE, null, values);
+        mdb.close();
+        nbCircles++;
+    }
+
+    public ArrayList<LatLng> getCircles(){
+
+        SQLiteDatabase mdb = this.getReadableDatabase();
+        ArrayList<LatLng> centersToReturn = new ArrayList<>();
+
+        Cursor cursor = mdb.query(TABLE_CIRCLE, new String[]{"*"}, null, null, null, null, null, null);
+
+        if(cursor != null) {
+            nbCircles = 0;
+            while(cursor.moveToNext()) {
+                cursor.getString(0);
+                LatLng center = new LatLng(Double.parseDouble(cursor.getString(1)), Double.parseDouble(cursor.getString(2)));
+                centersToReturn.add(center);
+                nbCircles++;
+            }
+            mdb.close();
+            return centersToReturn;
+        }
+        return null;
     }
 }

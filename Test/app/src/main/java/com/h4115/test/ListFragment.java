@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class ListFragment extends Fragment {
 
     protected ListView lsv;
     protected SwipeRefreshLayout lrl;
-    protected ArrayList<MainActivity.Happening> happenings;
+    protected ArrayList<Happening> happenings;
 
     @Nullable
     @Override
@@ -39,6 +40,13 @@ public class ListFragment extends Fragment {
             }
         });
 
+        lsv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Happening happening = (Happening) lsv.getItemAtPosition(position);
+                ((MainActivity) getActivity()).launchHappeningActivity(happening);
+            }
+        });
+
         return v;
     }
 
@@ -47,18 +55,6 @@ public class ListFragment extends Fragment {
         HappeningAdapter hpa = new HappeningAdapter(getContext(), happenings);
         lsv.setAdapter(hpa);
         lrl.setRefreshing(false);
-    }
-
-    public void sortByRemainingTime(){
-        System.out.println("Tri en cours");
-    }
-
-    public void sortByDistance(){
-        System.out.println("Tri en cours");
-    }
-
-    public void sortByAlphabeticalOrder(){
-        System.out.println("Tri en cours");
     }
 
     public class RefreshTask extends AsyncTask<Void, Void, Void> {
@@ -81,7 +77,6 @@ public class ListFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void arg2) {
-            this.mainActivity.refreshingFinishedGeneral();
         }
     }
 }

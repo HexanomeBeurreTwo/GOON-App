@@ -10,8 +10,8 @@ tools:context=".SplashScreen">
 
 <ImageView
     android:id="@+id/splachscreen"
-    android:layout_width="192dp"
-    android:layout_height="192dp"
+    android:layout_width="128dp"
+    android:layout_height="128dp"
     android:layout_gravity="center|center"
     android:src="@mipmap/splashscreen"/>
 
